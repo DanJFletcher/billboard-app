@@ -3,21 +3,29 @@ import axios from 'axios'
 
 const handler = async (event) => {
   try {
+    // Get the date from the query string given to us from the client
+    const date = event.queryStringParameters.date
+
+    // Setup options for billboard API call
     const options = {
       method: 'GET',
       url: 'https://billboard2.p.rapidapi.com/billboard_global_200',
-      params: {date: '2020-09-19'},
+      // This is where you take the date given to you from the client-side
+      // And pass it along to your billboard API
+      params: {date},
       headers: {
-        'X-RapidAPI-Key': '172f5ae0a3mshd6ed391d1c2553ep1f5a30jsn8f9417e36b58',
-        'X-RapidAPI-Host': 'billboard2.p.rapidapi.com'
+        'X-RapidAPI-Key': process.env.RAPID_API_KEY,
+        'X-RapidAPI-Host': process.env.RAPID_API_HOST
       }
     };
     
-    axios.request(options).then(function (response) {
-      return {statusCode: 200, body: JSON.stringify(response.data)
-    }).catch(function (error) {
-      console.error(error);
-    });
+    // Make the request
+    const response = await axios.request(options)
+
+    // Netlify requires that our handler returns an object
+    // that matches the structure { statusCode: number, body: string }
+    return { statusCode: 200, body: JSON.stringify(response.data) }
+
   } catch (error) {
     return { statusCode: 500, body: error.toString() }
   }

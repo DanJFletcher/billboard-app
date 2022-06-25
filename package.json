@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "netlify-cli": "^10.6.2"
   },
   "dependencies": {
